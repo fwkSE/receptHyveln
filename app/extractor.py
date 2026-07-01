@@ -10,6 +10,7 @@ from recipe_scrapers._exceptions import (
     NoSchemaFoundInWildMode,
     WebsiteNotImplementedError,
 )
+from app.nouw import try_extract_nouw_recipe
 from app.section_parser import (
     parse_recipe_from_sections,
     parse_section_ingredient_groups,
@@ -497,6 +498,10 @@ def _steps_from_scraper_or_html(scraper, html: str) -> list[str]:
 
 def extract_recipe(html: str, url: str) -> dict:
     """Extract and normalize recipe data from HTML."""
+    nouw_recipe = try_extract_nouw_recipe(url)
+    if nouw_recipe is not None:
+        return _finalize_recipe(nouw_recipe)
+
     scraper = None
     scraper_error: Exception | None = None
 
