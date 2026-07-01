@@ -75,7 +75,6 @@ curl -s http://127.0.0.1:8000/health
 
 When the HTML and API are served from the same URL, CORS usually does not matter. Set `ALLOWED_ORIGINS` and `ALLOWED_HOSTS` to your real domain in production.
 
-Hosting, VPS bootstrap, and CI deploy: **`DEPLOY.md`** (local file, gitignored).
 
 ## API
 
