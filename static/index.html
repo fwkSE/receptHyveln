@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ReceptHyveln</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <main class="container">
+    <header class="header">
+      <h1>ReceptHyveln</h1>
+      <p class="tagline">Klistra in en receptlänk — få ett rent, enkelt recept.</p>
+    </header>
+
+    <form id="extract-form" class="form">
+      <label for="url-input" class="visually-hidden">Recept-URL</label>
+      <input
+        type="url"
+        id="url-input"
+        name="url"
+        placeholder="https://www.ica.se/recept/..."
+        required
+        autocomplete="url"
+      >
+      <button type="submit" id="submit-btn">Visa recept</button>
+    </form>
+
+    <div id="status" class="status" hidden></div>
+
+    <article id="recipe" class="recipe" hidden>
+      <h2 id="recipe-title"></h2>
+      <p id="recipe-yield" class="yield" hidden></p>
+
+      <section class="ingredients-section">
+        <h3>Ingredienser</h3>
+        <div class="ingredients-main">
+          <aside id="measurement-hints" class="measurement-hints" hidden>
+            <h4>Måttomvandling</h4>
+            <table class="measurement-table">
+              <tbody id="measurement-hints-body"></tbody>
+            </table>
+          </aside>
+          <div id="ingredients-groups"></div>
+        </div>
+      </section>
+
+      <section>
+        <h3>Gör så här</h3>
+        <ol id="steps-list"></ol>
+      </section>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <p>
+      Öppen källkod på
+      <a href="https://github.com/fwkSE/receptHyveln" rel="noopener noreferrer">GitHub</a>.
+      Hittat ett fel?
+      <a href="https://github.com/fwkSE/receptHyveln/issues" rel="noopener noreferrer">Rapportera en bugg</a>.
+    </p>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

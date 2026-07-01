@@ -1,0 +1,46 @@
+name: Deploy VPS
+
+on:
+  workflow_run:
+    workflows: [Docker publish]
+    types: [completed]
+    branches: [master]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.head_branch == github.event.repository.default_branch)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy over SSH
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_PORT: ${{ secrets.VPS_PORT }}
+          VPS_APP_DIR: ${{ secrets.VPS_APP_DIR }}
+          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+        run: |
+          if [[ -z "${VPS_HOST}" || -z "${VPS_USER}" || -z "${VPS_SSH_KEY}" ]]; then
+            echo "VPS deploy secrets are not configured — skipping."
+            echo "Set VPS_HOST, VPS_USER, and VPS_SSH_KEY in repository secrets to enable deploy."
+            exit 0
+          fi
+
+          install -m 600 /dev/null "$RUNNER_TEMP/vps_key"
+          printf '%s\n' "$VPS_SSH_KEY" > "$RUNNER_TEMP/vps_key"
+          APP_DIR="${VPS_APP_DIR:-/opt/recept-hyveln}"
+
+          ssh -i "$RUNNER_TEMP/vps_key" \
+            -p "${VPS_PORT:-22}" \
+            -o BatchMode=yes \
+            -o StrictHostKeyChecking=accept-new \
+            "${VPS_USER}@${VPS_HOST}" \
+            "set -euo pipefail
+              cd \"${APP_DIR}\"
+              docker compose pull
+              docker compose up -d --remove-orphans
+              docker compose ps
+            "

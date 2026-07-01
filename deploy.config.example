@@ -1,0 +1,13 @@
+# Copy to deploy.config and fill in your VPS details.
+# deploy.config is gitignored — keep secrets out of the repo.
+
+VPS_HOST=YOUR_VPS_IP_OR_HOSTNAME
+VPS_USER=YOUR_VPS_USER
+VPS_PORT=22
+VPS_SSH_KEY=$HOME/.ssh/YOUR_VPS_SSH_KEY
+
+# Remote directory containing docker-compose.yml and .env
+VPS_APP_DIR=/opt/recept-hyveln
+
+# Set to true after the VPS is bootstrapped and compose is in place
+VPS_DEPLOY=false
